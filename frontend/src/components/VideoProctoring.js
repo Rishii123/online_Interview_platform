@@ -24,7 +24,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import * as tf from "@tensorflow/tfjs";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
-import * as faceLandmarksDetection from "@tensorflow-models/face-landmarks-detection";
+// Using browser-based face detection API instead of TensorFlow models for simplicity
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
