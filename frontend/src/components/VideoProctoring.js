@@ -117,15 +117,11 @@ export default function VideoProctoring() {
       // Load TensorFlow.js backend
       await tf.ready();
       
-      // Load models
-      const [objectModel, faceModel] = await Promise.all([
-        cocoSsd.load(),
-        faceLandmarksDetection.load(faceLandmarksDetection.SupportedPackages.mediaPipeFaceMesh)
-      ]);
+      // Load object detection model only
+      const objectModel = await cocoSsd.load();
       
       setModels({
         objectDetection: objectModel,
-        faceDetection: faceModel,
         loaded: true
       });
       
