@@ -45,7 +45,6 @@ export default function VideoProctoring() {
   // Model states
   const [models, setModels] = useState({
     objectDetection: null,
-    faceDetection: null,
     loaded: false
   });
   
