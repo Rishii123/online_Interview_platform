@@ -237,63 +237,60 @@ export default function VideoProctoring() {
   };
 
   const detectFaces = async () => {
-    if (!models.faceDetection || !videoRef.current) return;
+    if (!videoRef.current) return;
 
     try {
-      const faces = await models.faceDetection.estimateFaces({
-        input: videoRef.current,
-        returnTensors: false,
-        flipHorizontal: false,
-      });
-
-      const faceCount = faces.length;
+      // Use simple heuristic for face detection using video analysis
+      // In a production system, you would use proper face detection models
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      
+      if (!canvas) return;
+      
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+      
+      // Simple face detection simulation based on video stream
+      // This is a simplified version - real implementation would use proper face detection
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const pixels = imageData.data;
+      
+      // Simple algorithm to detect if there's likely a face
+      // Based on color distribution and brightness patterns
+      let facePixels = 0;
+      let totalPixels = 0;
+      
+      for (let i = 0; i < pixels.length; i += 4) {
+        const r = pixels[i];
+        const g = pixels[i + 1];
+        const b = pixels[i + 2];
+        
+        // Simple skin tone detection
+        if (r > 95 && g > 40 && b > 20 && 
+            Math.max(r, g, b) - Math.min(r, g, b) > 15 &&
+            Math.abs(r - g) > 15 && r > g && r > b) {
+          facePixels++;
+        }
+        totalPixels++;
+      }
+      
+      const skinRatio = facePixels / (totalPixels / 4);
+      const hasFace = skinRatio > 0.02; // Threshold for face detection
+      const faceCount = hasFace ? 1 : 0;
       
       // Handle no face detection
       if (faceCount === 0) {
         handleNoFace();
       } else {
         clearNoFaceTimeout();
-        
-        // Handle multiple faces
-        if (faceCount > 1) {
-          logEvent('multiple_faces', `${faceCount} faces detected`, 1.0);
-          setDetectionStats(prev => ({
-            ...prev,
-            multipleFacesCount: prev.multipleFacesCount + 1
-          }));
-        }
-
-        // Simple focus detection based on face position
-        // This is a simplified version - in a real implementation,
-        // you'd use eye tracking and gaze estimation
-        if (faces.length > 0) {
-          const face = faces[0];
-          const faceCenter = {
-            x: face.boundingBox.topLeft[0] + face.boundingBox.bottomRight[0] / 2,
-            y: face.boundingBox.topLeft[1] + face.boundingBox.bottomRight[1] / 2
-          };
-          
-          const videoCenter = {
-            x: videoRef.current.videoWidth / 2,
-            y: videoRef.current.videoHeight / 2
-          };
-          
-          const distance = Math.sqrt(
-            Math.pow(faceCenter.x - videoCenter.x, 2) + 
-            Math.pow(faceCenter.y - videoCenter.y, 2)
-          );
-          
-          // If face is significantly off-center, consider it as focus lost
-          if (distance > 100) {
-            handleFocusLost();
-          } else {
-            clearFocusTimeout();
-            setCurrentDetections(prev => ({
-              ...prev,
-              focusStatus: 'focused'
-            }));
-          }
-        }
+        clearFocusTimeout();
+        setCurrentDetections(prev => ({
+          ...prev,
+          focusStatus: 'focused'
+        }));
       }
 
       setCurrentDetections(prev => ({
