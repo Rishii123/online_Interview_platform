@@ -9,6 +9,14 @@ A web-based platform for conducting online interviews, built with React (fronten
 - Question management
 - Video and text support
 
+<img width="1920" height="1017" alt="Screenshot 2025-09-16 004623" src="https://github.com/user-attachments/assets/6e9d9a50-60a3-4e25-a723-2ad744d9a1f8" />
+
+<img width="1920" height="1015" alt="Screenshot 2025-09-16 004638" src="https://github.com/user-attachments/assets/53bc536a-748e-47d0-8332-5751dbb92f87" />
+
+<img width="1920" height="1018" alt="Screenshot 2025-09-16 004711" src="https://github.com/user-attachments/assets/79e09069-ba19-4fd2-a6fd-c2dc6f71169a" />
+
+<img width="1920" height="1016" alt="image" src="https://github.com/user-attachments/assets/6abb264a-30b8-4cc3-afa2-6da56a9ab194" />
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18+ recommended)
